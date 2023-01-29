@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/lessonsFragment"
+        android:title="Занятия"
+        android:icon="@drawable/ic_lessons"/>
+
+    <item android:id="@+id/requestsFragment"
+        android:title="Заявки"
+        android:icon="@drawable/ic_requests"/>
+
+    <item android:id="@+id/addFragment"
+        android:title="Добавить"
+        android:icon="@drawable/ic_add"/>
+
+    <item android:id="@+id/chatFragment"
+        android:title="Чат"
+        android:icon="@drawable/ic_chat"/>
+
+    <item android:id="@+id/moreFragment"
+        android:title="Ещё"
+        android:icon="@drawable/ic_more"/>
+
+</menu>
