@@ -1,21 +1,18 @@
 package com.example.fitensslessonstest.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.Observer
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.fitensslessonstest.R
-import com.example.fitensslessonstest.adapters.DateAdapter
-import com.example.fitensslessonstest.adapters.LessonAdapter
+import com.example.fitensslessonstest.ui.adapters.LessonAdapter
 import com.example.fitensslessonstest.databinding.FragmentLessonsBinding
 import com.example.fitensslessonstest.ui.FitnessLessonsActivity
 import com.example.fitensslessonstest.ui.LessonsViewModel
+import com.example.fitensslessonstest.ui.adapters.DateSectionDecoration
 import com.example.fitensslessonstest.util.Resource
-import java.time.LocalDate
 
 
 class LessonsFragment : Fragment() {
@@ -23,11 +20,12 @@ class LessonsFragment : Fragment() {
     private var _binding: FragmentLessonsBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: LessonsViewModel
-    private lateinit var dateAdapter: DateAdapter
+    private lateinit var lessonAdapter: LessonAdapter
+    private lateinit var dateSectionDecoration: DateSectionDecoration
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentLessonsBinding.inflate(inflater, container, false)
@@ -39,10 +37,12 @@ class LessonsFragment : Fragment() {
 
 
         viewModel = (activity as FitnessLessonsActivity).viewModel
+
         binding.rvDates.apply {
-            dateAdapter = DateAdapter()
-            adapter = dateAdapter
+            lessonAdapter = LessonAdapter()
+            adapter = lessonAdapter
             layoutManager = LinearLayoutManager(activity)
+
         }
 
         viewModel.fitnessInformation.observe(viewLifecycleOwner) { response ->
@@ -50,12 +50,10 @@ class LessonsFragment : Fragment() {
                 is Resource.Success -> {
                     response.data?.let { fitnessResponse ->
                         hideProgressBar()
-                        dateAdapter.differ.submitList(
-                            fitnessResponse.lessons.toList().groupBy { it.date }.keys.map { date ->
-                                LocalDate.parse(date)
-                            })
-                        dateAdapter.lessonsForDate = fitnessResponse.lessons.groupBy { it.date }
-
+                        val lessons = fitnessResponse.lessons.toList()
+                        lessonAdapter.differ.submitList(lessons)
+                        dateSectionDecoration = DateSectionDecoration(requireContext(), lessons)
+                        binding.rvDates.addItemDecoration(dateSectionDecoration)
                     }
                 }
                 is Resource.Error -> {
@@ -73,6 +71,7 @@ class LessonsFragment : Fragment() {
 
 
     }
+
     var isLoading = false
 
     private fun hideProgressBar() {

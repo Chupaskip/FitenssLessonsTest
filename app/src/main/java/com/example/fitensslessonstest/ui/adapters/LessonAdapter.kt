@@ -1,4 +1,4 @@
-package com.example.fitensslessonstest.adapters
+package com.example.fitensslessonstest.ui.adapters
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -15,24 +15,23 @@ import java.time.Duration
 import java.time.LocalTime
 
 
-class LessonAdapter(private val listLessons: List<Lesson>) :
+class LessonAdapter() :
     RecyclerView.Adapter<LessonAdapter.LessonViewHolder>() {
 
     inner class LessonViewHolder(itemView: View) : ViewHolder(itemView)
 
 
-//    private val differCallback = object : DiffUtil.ItemCallback<Lesson>() {
-//        override fun areItemsTheSame(oldItem: Lesson, newItem: Lesson): Boolean {
-//            return oldItem.appointmentId == newItem.appointmentId
-//        }
-//
-//        override fun areContentsTheSame(oldItem: Lesson, newItem: Lesson): Boolean {
-//            return newItem == oldItem
-//        }
-//
-//    }
-//
-//    val differ = AsyncListDiffer(this, differCallback)
+    private val differCallback = object : DiffUtil.ItemCallback<Lesson>() {
+        override fun areItemsTheSame(oldItem: Lesson, newItem: Lesson): Boolean {
+            return oldItem.appointmentId == newItem.appointmentId
+        }
+
+        override fun areContentsTheSame(oldItem: Lesson, newItem: Lesson): Boolean {
+            return newItem == oldItem
+        }
+    }
+
+    val differ = AsyncListDiffer(this, differCallback)
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LessonViewHolder {
@@ -41,12 +40,11 @@ class LessonAdapter(private val listLessons: List<Lesson>) :
                 R.layout.lesson_item, parent, false
             )
         )
-
     }
 
 
     override fun onBindViewHolder(holder: LessonViewHolder, position: Int) {
-        val lesson = listLessons[position]
+        val lesson = differ.currentList[position]
         holder.itemView.apply {
             findViewById<View>(R.id.colorOfLesson).setBackgroundColor(Color.parseColor(lesson.color))
             findViewById<TextView>(R.id.tvNameOfLesson).text = lesson.name
@@ -60,7 +58,7 @@ class LessonAdapter(private val listLessons: List<Lesson>) :
     }
 
     override fun getItemCount(): Int {
-        return listLessons.size
+        return differ.currentList.size
     }
 
 

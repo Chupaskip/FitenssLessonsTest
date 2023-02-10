@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/tvDate"
@@ -14,10 +14,4 @@
         android:layout_marginBottom="8dp"
         tools:text="понедельник, 09 января" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvLessons"
-        android:clipToPadding="false"
-        tools:listitem="@layout/lesson_item"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+</FrameLayout>
